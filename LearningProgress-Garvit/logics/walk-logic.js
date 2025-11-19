@@ -49,7 +49,7 @@ function updateCharacter(delta) {
     }
 
     // Play or stop walk animation
-    if (mixer && walkingAction) { //walking action is the animation in blender model
+    if (mixer && walkingAction) { //walkingAction is the pre given animation in blender model
         if (isWalking) {
             walkingAction.play();
         } else {
