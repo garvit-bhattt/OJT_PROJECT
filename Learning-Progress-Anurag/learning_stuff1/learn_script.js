@@ -17,7 +17,9 @@ const renderer = new THREE.WebGLRenderer({canvas:canvas});// here i stored rende
 
 renderer.setSize(sizes.height,sizes.width);// here i define the size of render output , in set size is there a third attribute also called false it will use for render the our app on half resolution => setSize(window.innerWidth/2, window.innerHeight/2, false)
 
-document.body.appendChild(renderer.domElement)// this is a canvas element that will be add in body of html
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));//it define the pixel value how the computer take resolution in one pixel in every computer if any device have capability but it takes only according to this code
+
+// document.body.appendChild(renderer.domElement)// this is a canvas element that will be add in body of html
 
 //so all three component set but where the object we see and how
 
@@ -29,10 +31,22 @@ const material = new THREE.MeshBasicMaterial({color:0xffa500})// so its add mate
 
 //add both material and geometry on mesh(like a object) that define cube
 
+//making line
+const material_line = new THREE.LineBasicMaterial({color:0xff0000});//stored line material
+
+const points = [];
+points.push(new THREE.Vector3(-1,0,0));
+points.push(new THREE.Vector3(0,1,0));
+points.push(new THREE.Vector3(1,0,0));
+
+const geometry_line = new THREE.BufferGeometry().setFromPoints( points );//geometry 
+const line = new THREE.Line( geometry_line, material_line );//combine both as we do in prevoius
+
+
 const cube = new THREE.Mesh(geometry,material);// it takes geometry that deifne the mesh and material for color and texturing the mesh
 
-//add cube in scene
-scene.add(cube)
+//add cube and line in scene
+scene.add(cube,line)
 
 //camera positioning
 camera.position.z= 5;
@@ -46,6 +60,7 @@ function handleResize(){
     camera.aspect = sizes.width/sizes.height
     camera.updateProjectionMatrix();
     renderer.setSize(sizes.width,sizes.height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 }
 
 window.addEventListener('resize',handleResize)// its event listener use on window obj to resize the canvas and changes the value according to the resizing in the handlerfunction
@@ -55,7 +70,7 @@ window.addEventListener('resize',handleResize)// its event listener use on windo
 
 
 //cube created and all components called but wouldn't we able see anything . solution
-//because we dont rendering anything
+//because we doesnt rendering anything
 
 //for render we use render or animation loop
 function animate(){
