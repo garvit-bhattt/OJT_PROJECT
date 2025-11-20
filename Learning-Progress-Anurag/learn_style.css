@@ -1,0 +1,21 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* give the size to the div that containes canvas  */
+#experience{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+/*canvas size by web layout (css)*/
+
+#experience-canvas{
+    height: 100%;
+    width: 100%;
+
+}

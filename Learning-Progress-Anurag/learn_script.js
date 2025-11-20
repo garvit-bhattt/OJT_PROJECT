@@ -1,17 +1,21 @@
 import * as THREE from 'three';
 
-
+const canvas  = document.getElementById('experience-canvas')
+const sizes = {
+    width : window.innerWidth,
+    height : window.innerHeight
+}
 // for viewing any thing we need three thing scene,camera,and render
 //scene
 const scene = new THREE.Scene(); //here i have stored blank scene 
 
 //camera
-const camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,100);//here i stored camera with FOV,aspect ratio and near,far values.
+const camera = new THREE.PerspectiveCamera(75,sizes.width/sizes.height,0.1,100);//here i stored camera with FOV,aspect ratio and near,far values.
 
 //renderer
-const renderer = new THREE.WebGLRenderer();// here i stored renderer component
+const renderer = new THREE.WebGLRenderer({canvas:canvas});// here i stored renderer component
 
-renderer.setSize(window.innerWidth,window.innerWidth);// here i define the size of render output , in set size is there a third attribute also called false it will use for render the our app on half resolution => setSize(window.innerWidth/2, window.innerHeight/2, false)
+renderer.setSize(sizes.height,sizes.width);// here i define the size of render output , in set size is there a third attribute also called false it will use for render the our app on half resolution => setSize(window.innerWidth/2, window.innerHeight/2, false)
 
 document.body.appendChild(renderer.domElement)// this is a canvas element that will be add in body of html
 
@@ -31,7 +35,24 @@ const cube = new THREE.Mesh(geometry,material);// it takes geometry that deifne 
 scene.add(cube)
 
 //camera positioning
-camera.position.z= 0;
+camera.position.z= 5;
+
+//for resizing or responsive sizing we use event listener resize on window
+
+function handleResize(){
+    //define size of canvas and update prjection of camera according to window size .
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
+    camera.aspect = sizes.width/sizes.height
+    camera.updateProjectionMatrix();
+    renderer.setSize(sizes.width,sizes.height)
+}
+
+window.addEventListener('resize',handleResize)// its event listener use on window obj to resize the canvas and changes the value according to the resizing in the handlerfunction
+
+
+
+
 
 //cube created and all components called but wouldn't we able see anything . solution
 //because we dont rendering anything
