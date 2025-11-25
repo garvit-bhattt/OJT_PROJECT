@@ -45,8 +45,8 @@ function animate() {
     requestAnimationFrame(animate);
 
     // 2. Update Logic (Move things)
-    ship.rotation.x += 0.01;
-    ship.rotation.y += 0.01;
+    myShip.rotation.x += 0.01;
+    myShip.rotation.y += 0.01;
 
     // 3. Render (Take the picture)
     renderer.render(scene, camera);
