@@ -39,6 +39,8 @@ export class SpaceShip {
         ship.add(leftWing);
         const rightWing = new THREE.Mesh(wingGeometry, wingMaterial);
         rightWing.position.set(1, 0, 0);
+        ship.position.y=100;
+        ship.position.z=190;
         ship.add(rightWing);
         return ship;
     }
