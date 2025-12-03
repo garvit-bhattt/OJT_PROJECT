@@ -1,14 +1,8 @@
 import * as THREE from "three";
 import { SpaceShip } from "./Objects/SpaceShip.js";
-import { Sea } from "./Objects/Sea.js";
-import { Enemy } from "./Objects/Enemy.js";
 
 
-
-// Global Variables 
-let energy = 100;
 let mousePos = { x: 0, y: 0 };
-
 
 
 // 1. Create the Scene, Camera, and Renderer
@@ -16,14 +10,14 @@ const scene = new THREE.Scene();
 // Add some fog for depth (matches the background color you might add later)
 scene.fog = new THREE.Fog(0xf7d9aa, 100, 950);
 // FOV: 75, Aspect: Window Width/Height, Near: 0.1, Far: 1000
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 10000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 // IMPORTANT: We must move the camera back! 
 // By default, the camera and objects spawn at (0,0,0). 
 // If the camera is inside the object, we won't see it.
-camera.position.set(0, 150, 400);
+camera.position.z = 10;
 // --- FIX: LOOK AT THE WORLD ---
-// camera.lookAt(0, 0, 0); 
+camera.lookAt(0, 0, 0); 
 // -----------------------------
 
 const renderer = new THREE.WebGLRenderer();
@@ -33,9 +27,8 @@ world.appendChild(renderer.domElement);
 
 // Create the SpaceShip and add it to the scene
 const myShip = new SpaceShip();
-scene.add(myShip.mesh);
-myShip.mesh.scale.set(0.75, 0.75, 0.75);
-myShip.mesh.position.y = 200;
+scene.add(myShip);
+myShip.rotation.y = -90 * (Math.PI / 180) + mousePos.x * 0.5;
 // // 2. Create the Geometry (Cube)
 // const test = new THREE.Group(); // Default is 1x1x1 cube
 // const geometry = new THREE.BoxGeometry(1, 3, 1);
@@ -56,11 +49,6 @@ myShip.mesh.position.y = 200;
 // test.add(rightWing);
 // scene.add(test);
 
-// Create an Enemy and add it to the scene
-const enemy = new Enemy();
-enemy.mesh.position.y = 0; // Same height as ship
-enemy.mesh.position.x = 200; // Far to the right
-scene.add(enemy.mesh);
 // use mouse move to rotate the ship
 document.addEventListener('mousemove', (event) => {
     // Convert mouse position to normalized device coordinates (-1 to +1)
@@ -90,8 +78,7 @@ scene.add(directionalLight);
 // // Create the Sea
 // const sea = new Sea();
 // scene.add(sea.mesh);
-const seaSphere= new Sea();
-scene.add(seaSphere.mesh)
+
 
 
 // --- 5. HELPER FUNCTION (The Math) ---
@@ -126,8 +113,8 @@ function animate() {
 
     // 2. Calculate Targets (Where we WANT to be)
     // -75 to 75 is the range of the world
-    let targetX = normalize(mousePos.x, -0.75, 0.75, -1, 3);
-    let targetY = normalize(mousePos.y, -0.75, 0.75, -1, 5);
+    let targetX = normalize(mousePos.x, -0.75, 0.75, -3, 3);
+    let targetY = normalize(mousePos.y, -0.75, 0.75, -5, 5);
 
     // 3. Move the Ship (Lerp)
     // We check if .mesh exists, otherwise we use myShip directly
@@ -145,7 +132,7 @@ function animate() {
 
     // ROLL: moving Left/Right (X) affects Z rotation
     // We calculate the gap (targetX - currentX) to know how hard to bank
-    shipObj.rotation.z = (targetY - shipObj.position.y) * 0.0128; // 
+    shipObj.rotation.z = (targetY - shipObj.position.y) * 0.0128; // <--- WAIT! This is wrong in your code too.
     
     // CORRECT ROLL LOGIC:
     // If I move Right (Positive X), I should roll Right (Negative Z usually)
@@ -153,41 +140,6 @@ function animate() {
 
     // Rotate the sea to create the illusion of speed
     // sea.mesh.rotation.z += 0.005;
-    seaSphere.mesh.rotation.z += 0.005;  // slow rotation
-    // seaSphere.mesh.rotation.x += 0.0002; // optional slight wobble
-
-    // Update Enemy Movement
-// 5. Update Enemy
-    enemy.tick();
-
-    // 6. Collision Detection
-    // <--- FIXED: Use shipObj (the actual mesh moving) not myShip
-    let distance = shipObj.position.distanceTo(enemy.mesh.position);
-    
-    // Debug log (remove later if spammy)
-    // console.log("Dist:", distance); 
-
-    if(distance < 15){ // Hit!
-        console.log("CRASH! Energy Lost.");
-        energy -= 10;
-        
-        // Visual Feedback: Knockback
-        shipObj.position.x -= 20; 
-        
-        // Reset Enemy immediately so it doesn't hit twice
-        enemy.mesh.position.x = 200;
-        // Randomize Y between -25 and 25
-        enemy.mesh.position.y = (Math.random() * 50) - 25; 
-    }
-
-    // 7. Enemy Recycle Logic
-    if (enemy.mesh.position.x < -200) {
-        // Teleport back to right
-        enemy.mesh.position.x = 200;
-
-        // <--- FIXED: Simple math for range -25 to 25
-        enemy.mesh.position.y = (Math.random() * 50) - 25; 
-    }
 
 
     // 5. Render

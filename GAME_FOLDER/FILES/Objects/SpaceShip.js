@@ -1,154 +1,61 @@
 import * as THREE from 'three';
-import { Colors } from '../constants.js';
-// import { Pilot } from './Pilot.js';
+// import { Colors } from '../constants.js'; // Uncomment if you have constants
 
 export class SpaceShip {
     constructor() {
-        this.mesh = new THREE.Group();
-        
-        this.rotorL = null;
-        this.rotorR = null;
-        this.engineGlows = [];
-        this.hullMesh = null; // Reference for flashing red
-        this.pilot = null;
-        
-        // PHYSICS STATE
-        this.shakeTimer = 0;
-        
-        this.init();
-    }
+        const ship = new THREE.Group(); // The invisible parent object
 
-    init() {
-        // Materials
-        const matHull = new THREE.MeshStandardMaterial({
-            color: Colors.ship, 
+        // Main Body
+        const bodyGeometry = new THREE.CylinderGeometry(0.5, 0.5, 2, 32);
+        const bodyMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xf25346, // Red
             roughness: 0.4,
             metalness: 0.8,
             flatShading: true
-        });
+         });
+        const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+        body.rotation.x = Math.PI / 2;
+        body.castShadow = true; // Enable shadow
+        ship.add(body);
 
-        const matDark = new THREE.MeshStandardMaterial({
-            color: 0x222222,
-            roughness: 0.6,
-            metalness: 0.5,
-            flatShading: true
-        });
-
-        const matGlow = new THREE.MeshStandardMaterial({
-            color: 0x00ffff,
-            emissive: 0x00ffff,
-            emissiveIntensity: 2.0,
-            toneMapped: false
-        });
-
-        // 1. Hull
-        const geomHull = new THREE.BoxGeometry(35, 12, 12);
-        this.hullMesh = new THREE.Mesh(geomHull, matHull.clone()); // Clone to allow color flash
-        this.hullMesh.castShadow = true;
-        this.hullMesh.receiveShadow = true;
-        this.mesh.add(this.hullMesh);
-
-        // 2. Nose
-        const geomNose = new THREE.BoxGeometry(10, 6, 8);
-        const nose = new THREE.Mesh(geomNose, matDark);
-        nose.position.set(20, 0, 0); 
-        nose.castShadow = true;
-        this.mesh.add(nose);
-
-        // 3. Wings
-        const geomWing = new THREE.BoxGeometry(10, 4, 60);
-        const wings = new THREE.Mesh(geomWing, matHull);
-        wings.position.set(-5, 4, 0); 
-        wings.castShadow = true;
-        this.mesh.add(wings);
-
-        // 4. Rotors
-        const createRotorAssembly = (zPos) => {
-            const assembly = new THREE.Group();
-            assembly.position.set(-5, 6, zPos);
-
-            const geomPod = new THREE.CylinderGeometry(6, 4, 10, 8);
-            const pod = new THREE.Mesh(geomPod, matDark);
-            pod.castShadow = true;
-            assembly.add(pod);
-
-            const spinner = new THREE.Group();
-            spinner.position.y = 6;
-
-            const geomBlade = new THREE.BoxGeometry(36, 0.5, 4);
-            const blade1 = new THREE.Mesh(geomBlade, matHull);
-            const blade2 = blade1.clone();
-            blade2.rotation.y = Math.PI / 2;
-
-            spinner.add(blade1);
-            spinner.add(blade2);
-
-            const geomTip = new THREE.BoxGeometry(2, 1, 2);
-            const tips = [16, -16];
-            tips.forEach(x => {
-                const t1 = new THREE.Mesh(geomTip, matGlow); t1.position.x = x; spinner.add(t1);
-                const t2 = new THREE.Mesh(geomTip, matGlow); t2.position.z = x; spinner.add(t2);
-            });
-
-            assembly.add(spinner);
-            return { assembly, spinner };
-        };
-
-        const leftRotor = createRotorAssembly(28);
-        this.mesh.add(leftRotor.assembly);
-        this.rotorL = leftRotor.spinner;
-
-        const rightRotor = createRotorAssembly(-28);
-        this.mesh.add(rightRotor.assembly);
-        this.rotorR = rightRotor.spinner;
-
-        // 5. Rear Engines
-        const geomThrustBlock = new THREE.BoxGeometry(8, 8, 8);
-        const thrustL = new THREE.Mesh(geomThrustBlock, matDark);
-        thrustL.position.set(-18, 0, 8);
-        this.mesh.add(thrustL);
-
-        const thrustR = new THREE.Mesh(geomThrustBlock, matDark);
-        thrustR.position.set(-18, 0, -8);
-        this.mesh.add(thrustR);
-
-        const geomPlate = new THREE.PlaneGeometry(8, 8);
-        geomPlate.rotateY(-Math.PI / 2);
-
-        const glowL = new THREE.Mesh(geomPlate, matGlow.clone());
-        glowL.position.set(-22.5, 0, 8);
-        this.mesh.add(glowL);
-        this.engineGlows.push(glowL);
-
-        const glowR = new THREE.Mesh(geomPlate, matGlow.clone());
-        glowR.position.set(-22.5, 0, -8);
-        this.mesh.add(glowR);
-        this.engineGlows.push(glowR);
-
-        // 6. Cockpit & Pilot
-        const geomCockpitBase = new THREE.BoxGeometry(12, 8, 10);
-        const cockpitBase = new THREE.Mesh(geomCockpitBase, matHull);
-        cockpitBase.position.set(10, 5, 0);
-        this.mesh.add(cockpitBase);
-
-        const geomGlass = new THREE.BoxGeometry(10, 6, 8);
-        const matGlass = new THREE.MeshPhysicalMaterial({
-            color: 0x111111,
+        // Cockpit
+        const cockpitGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+        const cockpitMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xd8d0d1, // White/Grey
+            roughness: 0.2,
             metalness: 0.9,
-            roughness: 0.0,
-            transmission: 0.7,
-            transparent: true,
-            opacity: 0.5
-        });
-        const glass = new THREE.Mesh(geomGlass, matGlass);
-        glass.position.set(10, 8, 0);
-        this.mesh.add(glass);
+            flatShading: true
+         });
+        const cockpit = new THREE.Mesh(cockpitGeometry, cockpitMaterial);
+        cockpit.position.set(0, 0.5, 0);
+        ship.add(cockpit);
 
-        // this.pilot = new Pilot();
-        // this.pilot.mesh.scale.set(0.25, 0.25, 0.25);
-        // this.pilot.mesh.position.set(10, 7, 0);
-        // this.pilot.mesh.rotation.y = -Math.PI / 2;
-        // this.mesh.add(this.pilot.mesh);
+        // Wings
+        const wingGeometry = new THREE.BoxGeometry(1.5, 0.1, 0.5);
+        const wingMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0xf25346, 
+            roughness: 0.4,
+            metalness: 0.8,
+            flatShading: true
+         });
+        
+        const leftWing = new THREE.Mesh(wingGeometry, wingMaterial);
+        leftWing.position.set(-1, 0, 0);
+        leftWing.castShadow = true;
+        ship.add(leftWing);
+
+        const rightWing = new THREE.Mesh(wingGeometry, wingMaterial);
+        rightWing.position.set(1, 0, 0);
+        rightWing.castShadow = true;
+        ship.add(rightWing);
+
+        // --- FIXED: REMOVED HARDCODED POSITIONS ---
+        // ship.position.y = 100;  <-- DELETED
+        // ship.position.z = 190;  <-- DELETED
+        
+        // Important: If using the Class pattern, usually we assign to 'this.mesh'
+        // But your main.js expects the class to RETURN the mesh directly.
+        // So we keep it as is.
+        return ship;
     }
-
 }
