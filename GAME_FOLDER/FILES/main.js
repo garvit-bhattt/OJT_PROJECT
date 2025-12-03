@@ -6,16 +6,15 @@ import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 
-import { Sea } from "./objects/Sea.js";
-import { Sky } from "./objects/Sky.js";
-import { Airplane } from "./objects/Airplane.js";
+import { Sea } from "./Objects/Sea.js";
+import { Sky } from "./Objects/Sky.js";
+import {Airplane} from "./Objects/Airplane.js";
 import { Coin } from "./objects/Coin.js";
-import { Enemy } from "./objects/Enemy.js";
-import { AmmoPack } from "./objects/AmmoPack.js";
+import { Enemy } from "./Objects/Enemy.js";
+import { AmmoPack } from "./Objects/AmmoPack.js";
 import { Bullet } from "./objects/Bullet.js";
 import { Boss } from "./objects/Boss.js";
-import { Background } from "./objects/Background.js";
-
+import { Background } from "./Objects/Background.js";
 import { ParticleManager } from "./objects/Particles.js";
 import { SoundManager } from "./SoundManager.js";
 
