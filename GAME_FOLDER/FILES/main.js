@@ -1,5 +1,7 @@
 import * as THREE from "three";
 import { SpaceShip } from "./Objects/SpaceShip.js";
+import { Sea } from "./Objects/Sea.js";
+
 
 
 let mousePos = { x: 0, y: 0 };
@@ -8,8 +10,6 @@ let mousePos = { x: 0, y: 0 };
 // 1. Create the Scene, Camera, and Renderer
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xf7d9aa); // Set background color (Beige)
-
-// Add some fog for depth (matches the background color you might add later)
 scene.fog = new THREE.Fog(0xf7d9aa, 10, 950);
 // FOV: 75, Aspect: Window Width/Height, Near: 0.1, Far: 1000
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -17,20 +17,20 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 // IMPORTANT: We must move the camera back! 
 // By default, the camera and objects spawn at (0,0,0). 
 // If the camera is inside the object, we won't see it.
-camera.position.z = 10;
+camera.position.set(0,0,200);
 // --- FIX: LOOK AT THE WORLD ---
 camera.lookAt(0, 0, 0); 
 // -----------------------------
 
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.shadowMap.enabled = true; // Enable Shadows
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);// Make it full screen
 const world = document.getElementById("world");
 world.appendChild(renderer.domElement);
 
 // Create the SpaceShip and add it to the scene
 const myShip = new SpaceShip();
 scene.add(myShip);
+myShip.position.z=190
 myShip.rotation.y = -90 * (Math.PI / 180) + mousePos.x * 0.5;
 // // 2. Create the Geometry (Cube)
 // const test = new THREE.Group(); // Default is 1x1x1 cube
@@ -69,19 +69,20 @@ document.addEventListener('mousemove', (event) => {
 
 
 
-// 3. Lighting
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-scene.add(ambientLight);
 
+// 3. Add Lighting to the Scene
+// Lighting (so we can see the 3D shapes properly)
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Soft white light
+scene.add(ambientLight);
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-directionalLight.position.set(10, 20, 10);
-directionalLight.castShadow = true;
+directionalLight.position.set(5, 10, 7.5);
 scene.add(directionalLight);
 
 // // Create the Sea
 // const sea = new Sea();
 // scene.add(sea.mesh);
-
+const seaSphere= new Sea();
+scene.add(seaSphere.mesh)
 
 
 // --- 5. HELPER FUNCTION (The Math) ---
@@ -143,6 +144,8 @@ function animate() {
 
     // Rotate the sea to create the illusion of speed
     // sea.mesh.rotation.z += 0.005;
+    seaSphere.mesh.rotation.z += 0.005;  // slow rotation
+    // seaSphere.mesh.rotation.x += 0.0002; // optional slight wobble
 
 
     // 5. Render
