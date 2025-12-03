@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Colors } from '../constants.js';
+import { Colors } from '../src/constants.js';
 
 export class Coin {
     constructor() {
