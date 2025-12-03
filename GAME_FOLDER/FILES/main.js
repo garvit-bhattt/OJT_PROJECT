@@ -57,7 +57,7 @@ myShip.rotation.y = -90 * (Math.PI / 180) + mousePos.x * 0.5;
 
 // Create an Enemy and add it to the scene
 const enemy = new Enemy();
-enemy.mesh.position.y = 60; // Same height as ship
+enemy.mesh.position.y = 0; // Same height as ship
 enemy.mesh.position.x = 200; // Far to the right
 scene.add(enemy.mesh);
 
@@ -161,7 +161,11 @@ function animate() {
     // Update Enemy Movement
     enemy.tick();
 
-    if(dist<15){
+    // Collision Detection
+    let distance = myShip.position.distanceTo(enemy.mesh.position);
+    console.log("Distance to Enemy:", distance);
+
+    if( distance < 15){
         console.log("Collision Detected!");
         energy -= 10;
         console.log("Energy:", energy);
@@ -177,7 +181,7 @@ function animate() {
         enemy.mesh.position.x = 200;
 
         // Randomize height slightly so it's not boring
-        enemy.mesh.position.y = normalize(Math.random(), 0, 1, 25, 110);
+        enemy.mesh.position.y = normalize(Math.random()*50)-25; // Around ship height
     }
 
 
