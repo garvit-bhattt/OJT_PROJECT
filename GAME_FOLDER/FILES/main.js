@@ -16,12 +16,12 @@ const scene = new THREE.Scene();
 // Add some fog for depth (matches the background color you might add later)
 scene.fog = new THREE.Fog(0xf7d9aa, 100, 950);
 // FOV: 75, Aspect: Window Width/Height, Near: 0.1, Far: 1000
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 10000);
 
 // IMPORTANT: We must move the camera back! 
 // By default, the camera and objects spawn at (0,0,0). 
 // If the camera is inside the object, we won't see it.
-camera.position.set(0,0,200);
+camera.position.set(0, 150, 400);
 // --- FIX: LOOK AT THE WORLD ---
 camera.lookAt(0, 0, 0); 
 // -----------------------------

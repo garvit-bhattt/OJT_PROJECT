@@ -1,27 +1,27 @@
 import * as THREE from "three";
+import { Colors } from "../constants.js";
 
 export class Enemy {
     constructor() {
-        // TetrahedronGeometry(radius, detail)
-        // detail=0 gives it a sharp, pyramid look.
         const geom = new THREE.TetrahedronGeometry(8, 2);
         
         const mat = new THREE.MeshStandardMaterial({
-            color: 0xf25346, // Red
+            color: Colors.enemy,
+            emissive: Colors.enemy,
+            // --- CHANGE 2: Almost No Glow ---
+            emissiveIntensity: 0.1, 
+            // --------------------------------
             flatShading: true,
+            roughness: 0.8, // Make it look rough/rocky
+            metalness: 0.2
         });
 
         this.mesh = new THREE.Mesh(geom, mat);
         this.mesh.castShadow = true;
     }
-    
-    // We add a specific function to handle its movement
+
     tick() {
-        // Rotate slightly to look dynamic
         this.mesh.rotation.x += 0.02;
         this.mesh.rotation.y += 0.02;
-        
-        // Move to the Left
-        this.mesh.position.x -= 2; 
     }
 }
