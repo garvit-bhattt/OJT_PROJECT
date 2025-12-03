@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { Colors } from '../constants.js';
 import { Pilot } from './Pilot.js';
 
-export class Spaceship {
+export class Airplane {
     constructor() {
         this.mesh = new THREE.Group();
         
