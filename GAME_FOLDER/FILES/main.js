@@ -154,6 +154,17 @@ function animate() {
     seaSphere.mesh.rotation.z += 0.005;  // slow rotation
     // seaSphere.mesh.rotation.x += 0.0002; // optional slight wobble
 
+    // Update Enemy Movement
+    enemy.tick();
+    // Logic: If it goes off screen to the left...
+    if (enemy.mesh.position.x < -200) {
+        // ...teleport it back to the right!
+        enemy.mesh.position.x = 200;
+
+        // Randomize height slightly so it's not boring
+        enemy.mesh.position.y = normalize(Math.random(), 0, 1, 25, 150);
+    }
+
 
     // 5. Render
     renderer.render(scene, camera);
