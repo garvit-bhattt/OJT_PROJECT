@@ -7,8 +7,10 @@ let mousePos = { x: 0, y: 0 };
 
 // 1. Create the Scene, Camera, and Renderer
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xf7d9aa); // Set background color (Beige)
+
 // Add some fog for depth (matches the background color you might add later)
-scene.fog = new THREE.Fog(0xf7d9aa, 100, 950);
+scene.fog = new THREE.Fog(0xf7d9aa, 10, 950);
 // FOV: 75, Aspect: Window Width/Height, Near: 0.1, Far: 1000
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
