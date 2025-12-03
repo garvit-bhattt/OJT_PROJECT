@@ -23,7 +23,7 @@ const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerH
 // If the camera is inside the object, we won't see it.
 camera.position.set(0, 150, 400);
 // --- FIX: LOOK AT THE WORLD ---
-camera.lookAt(0, 0, 0); 
+// camera.lookAt(0, 0, 0); 
 // -----------------------------
 
 const renderer = new THREE.WebGLRenderer();
@@ -33,8 +33,9 @@ world.appendChild(renderer.domElement);
 
 // Create the SpaceShip and add it to the scene
 const myShip = new SpaceShip();
-scene.add(myShip);
-myShip.rotation.y = -90 * (Math.PI / 180) + mousePos.x * 0.5;
+scene.add(myShip.mesh);
+myShip.mesh.scale.set(0.75, 0.75, 0.75);
+myShip.mesh.position.y = 200;
 // // 2. Create the Geometry (Cube)
 // const test = new THREE.Group(); // Default is 1x1x1 cube
 // const geometry = new THREE.BoxGeometry(1, 3, 1);
@@ -60,9 +61,6 @@ const enemy = new Enemy();
 enemy.mesh.position.y = 0; // Same height as ship
 enemy.mesh.position.x = 200; // Far to the right
 scene.add(enemy.mesh);
-
-let dist = myShip.position.distanceTo(enemy.mesh.position);
-console.log("Initial Distance to Enemy:", dist);
 // use mouse move to rotate the ship
 document.addEventListener('mousemove', (event) => {
     // Convert mouse position to normalized device coordinates (-1 to +1)
@@ -169,7 +167,7 @@ function animate() {
     // Debug log (remove later if spammy)
     // console.log("Dist:", distance); 
 
-    if(distance < 200){ // Hit!
+    if(distance < 15){ // Hit!
         console.log("CRASH! Energy Lost.");
         energy -= 10;
         
