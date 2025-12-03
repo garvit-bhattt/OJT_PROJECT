@@ -1,5 +1,7 @@
 import * as THREE from 'three';
-import { Colors, Textures } from '../src/constants.js';
+import { Colors } from '../constants.js';
+import { Textures } from '../constants.js';
+
 
 export class Background {
     constructor(scene) {

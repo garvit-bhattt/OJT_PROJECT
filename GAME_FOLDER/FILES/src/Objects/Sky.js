@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Colors } from '../src/constants.js';
+import { Colors } from '../constants.js';
 
 class Asteroid {
     constructor() {

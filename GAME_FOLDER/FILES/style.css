@@ -1,11 +1,79 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap');
+
+body {
+    margin: 0; padding: 0; overflow: hidden; width: 100vw; height: 100vh;
+    background-color: #0b0b14; font-family: 'Rajdhani', sans-serif; user-select: none;
 }
 
-#world {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+#world { position: absolute; width: 100%; height: 100%; overflow: hidden; }
+.hidden { display: none !important; }
+
+/* START SCREEN (Transparent) */
+#start-screen {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(11, 11, 20, 0.7); /* See-through */
+    backdrop-filter: blur(5px);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    z-index: 20; transition: opacity 0.5s ease-out;
 }
+.main-title { font-family: 'Orbitron'; font-size: 5rem; color: #fff; text-shadow: 0 0 20px #00ffff; margin: 0; letter-spacing: 5px; }
+.sub-title { font-size: 1.2rem; color: #00ffff; letter-spacing: 8px; margin-top: 10px; }
+#start-btn {
+    margin-top: 50px; padding: 15px 50px; font-family: 'Orbitron'; font-size: 1.5rem;
+    background: rgba(0, 255, 255, 0.1); color: #00ffff; border: 2px solid #00ffff;
+    cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px #00ffff;
+}
+#start-btn:hover { background: #00ffff; color: #000; }
+
+/* DASHBOARD */
+#dashboard {
+    position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 60px; align-items: center; z-index: 10;
+}
+.dash-col { display: flex; flex-direction: column; align-items: center; }
+.dash-label { font-size: 12px; color: #8888aa; letter-spacing: 2px; margin-bottom: 8px; }
+.dash-big-text { font-size: 36px; font-weight: 900; color: #ffffff; }
+.dash-sub-text { font-size: 14px; color: #555566; margin-top: -5px; }
+
+/* LEVEL RING LOADER */
+.level-container { position: relative; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; }
+.level-ring { position: absolute; top: 0; left: 0; transform: rotate(-90deg); }
+.level-ring circle { fill: none; stroke-width: 4; stroke-linecap: round; }
+.ring-bg { stroke: rgba(255, 255, 255, 0.1); }
+.ring-progress {
+    stroke: #ffae00; stroke-dasharray: 163; stroke-dashoffset: 163;
+    transition: stroke-dashoffset 0.3s ease-out; filter: drop-shadow(0 0 5px #ffae00);
+}
+.level-number { font-size: 24px; font-weight: 900; color: #ffae00; text-shadow: 0 0 10px #ffae00; z-index: 2; }
+
+/* ENERGY BAR */
+.energy-bar-bg { width: 150px; height: 10px; background: #222; border-radius: 5px; border: 1px solid #555; overflow: hidden; }
+.energy-fill { width: 100%; height: 100%; background: #00ffff; box-shadow: 0 0 10px #00ffff; transition: width 0.2s; }
+
+/* AMMO */
+#ammo-ui { position: absolute; bottom: 30px; right: 30px; text-align: right; z-index: 10; }
+.ammo-count { font-size: 48px; font-weight: 900; color: #ff0055; text-shadow: 0 0 15px #ff0055; }
+#bottom-text {
+    position: absolute; bottom: 30px; width: 100%; text-align: center;
+    color: #ff0055; font-size: 14px; letter-spacing: 4px; font-weight: bold; opacity: 0.8;
+}
+
+/* BOSS & GAME OVER */
+#boss-hud { position: absolute; top: 120px; left: 50%; transform: translateX(-50%); width: 400px; text-align: center; z-index: 5; }
+.boss-label { color: #ff0055; font-weight: 900; letter-spacing: 3px; margin-bottom: 5px; }
+.boss-bar-bg { width: 100%; height: 20px; background: rgba(0,0,0,0.5); border: 2px solid #ff0055; }
+.boss-bar-fill { width: 100%; height: 100%; background: #ff0055; transition: width 0.2s; }
+#game-over-screen {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(11, 11, 20, 0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; color: #ff0000; z-index: 30;
+}
+#game-over-screen h1 { font-family: 'Orbitron'; font-size: 4rem; text-shadow: 0 0 20px red; }
+#replay-btn {
+    margin-top: 20px; padding: 15px 50px; font-family: 'Orbitron'; font-size: 1.5rem;
+    background: rgba(0, 255, 255, 0.1); color: #00ffff; border: 2px solid #00ffff;
+    cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px #00ffff;
+}
+#replay-btn:hover { background: #00ffff; color: #000; }
+#danger-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 0, 0, 0.4); pointer-events: none; opacity: 0; z-index: 8; }
+.danger-pulse { animation: pulseRed 0.5s ease-in-out 3; }
+@keyframes pulseRed { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }

@@ -1,30 +1,30 @@
 import * as THREE from "three";
 import { Colors } from "./constants.js";
-import { normalize } from "../utils.js";
+import { normalize } from "./utils.js";
 
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 
-import { Sea } from "../Objects/Sea.js";
-import { Sky } from "../Objects/Sky.js";
-import {Airplane} from "../Objects/Airplane.js";
-import { Coin } from "../objects/Coin.js";
-import { Enemy } from "../Objects/Enemy.js";
-import { AmmoPack } from "../Objects/AmmoPack.js";
-import { Bullet } from "../Objects/Bullet.js";
-import { Boss } from "../Objects/Boss.js";
-import { Background } from "../Objects/Background.js";
-import {ParticleManager} from "../Objects/Particles.js";
-import { SoundManager } from "../SoundManager.js";
+import { Sea } from "./Objects/Sea.js";
+import { Sky } from "./Objects/Sky.js";
+import {Airplane} from "./Objects/Airplane.js";
+import { Coin } from "./objects/Coin.js";
+import { Enemy } from "./Objects/Enemy.js";
+import { AmmoPack } from "./Objects/AmmoPack.js";
+import { Bullet } from "./Objects/Bullet.js";
+import { Boss } from "./Objects/Boss.js";
+import { Background } from "./Objects/Background.js";
+import {ParticleManager} from "./Objects/Particles.js";
+import { SoundManager } from "./SoundManager.js";
 
 // --- LEVEL CONFIG ---
 const LEVEL_CONFIG = {
-  1: { target: 500, enemyChance: 0.02 },
-  2: { target: 1500, enemyChance: 0.04 },
-  3: { target: 3000, enemyChance: 0.07 },
-  4: { target: 6000, enemyChance: 0.1 },
-  5: { target: 12000, enemyChance: 0.15 },
+  1: { target: 250, enemyChance: 0.02 },
+  2: { target: 500, enemyChance: 0.03 },
+  3: { target: 1000, enemyChance: 0.05 },
+  4: { target: 2000, enemyChance: 0.07 },
+  5: { target: 4000, enemyChance: 0.15 },
   6: { target: 999999, enemyChance: 0.2 },
 };
 

@@ -2,14 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EJECTED CUBE</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22></text></svg>">
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
 </head>
 <body>
-    <div id="world">
-
+    
+    <div id="start-screen">
+        <div class="title-container">
+            <h1 class="main-title">EJECTED CUBE</h1>
+            <p class="sub-title">FLY IT TO THE END</p>
+        </div>
+        <button id="start-btn">LAUNCH SEQUENCE</button>
     </div>
-    <script type="module" src="main.js"></script>
+
+    <div id="dashboard" class="hidden">
+        <div class="dash-col">
+            <div class="dash-label">LEVEL</div>
+            <div class="level-container">
+                <svg class="level-ring" width="60" height="60">
+                    <circle class="ring-bg" cx="30" cy="30" r="26"></circle>
+                    <circle class="ring-progress" id="level-ring" cx="30" cy="30" r="26"></circle>
+                </svg>
+                <div class="level-number" id="level-value">1</div>
+            </div>
+        </div>
+
+        <div class="dash-col">
+            <div class="dash-label">DISTANCE</div>
+            <div class="dash-big-text" id="dist-value">0</div>
+            <div class="dash-sub-text" id="next-level-score">Goal: 500m</div>
+        </div>
+
+        <div class="dash-col">
+            <div class="dash-label">ENERGY</div>
+            <div class="energy-bar-bg">
+                <div class="energy-fill" id="energy-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="ammo-ui" class="hidden">
+        <div class="dash-label" style="color: #ff0055">PLASMA AMMO</div>
+        <div class="ammo-count" id="ammo-value">30</div>
+    </div>
+
+    <div id="bottom-text" class="hidden">
+        COLLECT CYAN ENERGY • AVOID RED OBSTACLES
+    </div>
+
+    <div id="game-over-screen" class="hidden">
+        <h1>CRITICAL FAILURE</h1>
+        <p>System Energy Depleted</p>
+        <p id="final-score">Distance: 0</p>
+        <button id="replay-btn">REBOOT SYSTEM</button>
+    </div>
+
+    <div id="danger-screen"></div>
+    <div id="boss-hud" class="hidden">
+        <div class="boss-label">ANOMALY DETECTED</div>
+        <div class="boss-bar-bg">
+            <div class="boss-bar-fill" id="boss-health-fill"></div>
+        </div>
+    </div>
+
+    <div id="world"></div>
+    <script type="module" src="./src/main.js"></script>
 </body>
 </html>
